@@ -1,4 +1,7 @@
-using API.Services;
+using Application.Services;
+using API.Services; //remove this
+using Application.HotelsHandler;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,8 +24,14 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddSingleton<IAmadeusTokenService, AmadeusTokenService>();
-            services.AddHttpClient<AmadeusTokenService>(c =>
+            /*  services.AddSingleton<Services.IAmadeusTokenService, Services.AmadeusTokenService>(); //remove and under
+             services.AddHttpClient<Services.AmadeusTokenService>(c =>
+             {
+
+             }); */
+
+            services.AddSingleton<Application.Services.IAmadeusTokenService, Application.Services.AmadeusTokenService>();
+            services.AddHttpClient<Application.Services.AmadeusTokenService>(c =>
             {
 
             });
@@ -32,6 +41,8 @@ namespace API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
+
+            services.AddMediatR(typeof(HotelsList.Handler).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
