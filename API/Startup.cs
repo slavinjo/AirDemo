@@ -1,5 +1,3 @@
-using Application.Services;
-using API.Services; //remove this
 using Application.HotelsHandler;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -23,18 +21,10 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            /*  services.AddSingleton<Services.IAmadeusTokenService, Services.AmadeusTokenService>(); //remove and under
-             services.AddHttpClient<Services.AmadeusTokenService>(c =>
-             {
-
-             }); */
-
+            //services.AddResponseCaching();
+            services.AddMemoryCache();
             services.AddSingleton<Application.Services.IAmadeusTokenService, Application.Services.AmadeusTokenService>();
-            services.AddHttpClient<Application.Services.AmadeusTokenService>(c =>
-            {
-
-            });
+            services.AddHttpClient<Application.Services.AmadeusTokenService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -43,6 +33,7 @@ namespace API
             });
 
             services.AddMediatR(typeof(HotelsList.Handler).Assembly);
+            services.AddHttpClient<HotelsList.Handler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,9 +46,11 @@ namespace API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
 
+           
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+            //app.UseResponseCaching();
 
             app.UseAuthorization();
 

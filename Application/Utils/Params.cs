@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
@@ -65,7 +66,7 @@ namespace Application.Utils
                 catch { }
             }
 
-            return query.ToString();
+            return "?" + query.ToString();
         }
 
         public string toBody()
@@ -94,6 +95,14 @@ namespace Application.Utils
             return _params;
         }
 
+        public static Params from(Dictionary<string, string> dict)
+        {
+            Params _params = new Params();
+            foreach (var newelem in dict)
+                _params.Add(newelem.Key.ToString(), newelem.Value.ToString());
+            return _params;
+        }
+
         /// <summary>
         /// Returns a String that represents the current Params.
         /// </summary>
@@ -102,6 +111,5 @@ namespace Application.Utils
         {
             return toString();
         }
-
     }
 }
