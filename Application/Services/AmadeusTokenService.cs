@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Application.Utils;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Application.Services
@@ -20,10 +21,12 @@ namespace Application.Services
         // The (UNIX) expiry time of this token
         private long expiresAt { get; set; }
 
+        private readonly IConfiguration _config;
 
         private readonly HttpClient _httpClient;
-        public AmadeusTokenService(HttpClient httpClient)
+        public AmadeusTokenService(HttpClient httpClient, IConfiguration config)
         {
+            _config = config;
             _httpClient = httpClient;
         }
 
@@ -45,7 +48,7 @@ namespace Application.Services
 
         public async Task<AmadeusToken> RevokeToken()
         {
-            Dictionary<string, string> body = Params.with("grant_type", "client_credentials").and("client_id", "SUmJwOw30fXSYg44Yth2e1FjVPdgEwB6").and("client_secret", "wAeGi1hjcPg32oOM");
+            Dictionary<string, string> body = Params.with("grant_type", _config.GetConnectionString("AmadeusGrantType")).and("client_id", _config.GetConnectionString("AmadeusID")).and("client_secret", _config.GetConnectionString("AmadeusSecret"));
             var response = await _httpClient.PostAsync(new Uri("https://test.api.amadeus.com/v1/security/oauth2/token"), new FormUrlEncodedContent(body));
             var responseBodyString = await response.Content.ReadAsStringAsync();
 

@@ -1,4 +1,3 @@
-
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -9,6 +8,7 @@ using MediatR;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.HotelsHandler
 {
@@ -25,9 +25,11 @@ namespace Application.HotelsHandler
             private readonly IAmadeusTokenService _tokenService;
             private readonly HttpClient _httpClient;
             private readonly IMemoryCache _memoryCache;
-            public Handler(IAmadeusTokenService tokenService, HttpClient httpClient, IMemoryCache memoryCache)
+            private readonly IConfiguration _config;
+            public Handler(IAmadeusTokenService tokenService, HttpClient httpClient, IMemoryCache memoryCache, IConfiguration config)
             {
                 _memoryCache = memoryCache;
+                _config = config;
                 _httpClient = httpClient;
                 _tokenService = tokenService;
             }
