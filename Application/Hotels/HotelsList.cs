@@ -26,10 +26,9 @@ namespace Application.HotelsHandler
             private readonly HttpClient _httpClient;
             private readonly IMemoryCache _memoryCache;
             private readonly IConfiguration _config;
-            public Handler(IAmadeusTokenService tokenService, HttpClient httpClient, IMemoryCache memoryCache, IConfiguration config)
+            public Handler(IAmadeusTokenService tokenService, HttpClient httpClient, IMemoryCache memoryCache)
             {
                 _memoryCache = memoryCache;
-                _config = config;
                 _httpClient = httpClient;
                 _tokenService = tokenService;
             }
@@ -60,16 +59,17 @@ namespace Application.HotelsHandler
             private async Task<Hotels> GetHotelsCall(HttpClient httpClient, IAmadeusTokenService tokenService, Query request)
             {
                 AmadeusToken token = await tokenService.GetToken();
-                Hotels reservationList = new Hotels();
+                Hotels hotelsList = new Hotels();
+
                 _httpClient.DefaultRequestHeaders.Authorization
                          = new AuthenticationHeaderValue("Bearer", token.access_token);
                 using (var response = await _httpClient.GetAsync("https://test.api.amadeus.com/v2/shopping/hotel-offers" + request.param.toQueryString()))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    reservationList = JsonConvert.DeserializeObject<Hotels>(apiResponse);
+                    hotelsList = JsonConvert.DeserializeObject<Hotels>(apiResponse);
                 }
 
-                return reservationList;
+                return hotelsList;
             }
         }
 

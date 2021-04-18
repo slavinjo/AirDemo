@@ -21,7 +21,6 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddResponseCaching();
             services.AddMemoryCache();
             services.AddSingleton<Application.Services.IAmadeusTokenService, Application.Services.AmadeusTokenService>();
             services.AddHttpClient<Application.Services.AmadeusTokenService>();
@@ -50,8 +49,7 @@ namespace API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
-            //app.UseResponseCaching();
-
+           
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

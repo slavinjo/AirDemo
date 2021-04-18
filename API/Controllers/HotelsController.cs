@@ -8,7 +8,6 @@ using Application.HotelsHandler;
 using Application.Services;
 using Application.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 
 namespace API.Controllers
@@ -29,7 +28,6 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        //[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, VaryByQueryKeys = new[] { "cityCode" })]
         public async Task<ActionResult<Hotels>> getHotels()
         {
             string json;
