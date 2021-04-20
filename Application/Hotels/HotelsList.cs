@@ -48,7 +48,7 @@ namespace Application.HotelsHandler
                     // Set cache options.
                     var cacheEntryOptions = new MemoryCacheEntryOptions()
                         // Keep in cache for this time, reset time if accessed.
-                        .SetSlidingExpiration(TimeSpan.FromSeconds(10000));
+                        .SetSlidingExpiration(TimeSpan.FromSeconds(10));
                     // Or keep in cache for 10 seconds no matter what
                     //.SetAbsoluteExpiration(TimeSpan.FromSeconds(10));
 
