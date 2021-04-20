@@ -2,14 +2,13 @@ import { useQueryClient } from 'react-query'
 import { Button, Item, Label, Segment } from 'semantic-ui-react'
 import { StarsComponent } from '../../../app/layout/StarsComponent'
 import { Hotel } from '../../../app/model/Hotel'
-import { setEditMode, setSelectedHotel } from '../../../app/store/HotelStore'
+import { setSelectedHotel } from '../../../app/store/HotelStore'
 
 interface Props {
     hotels: Hotel[] | undefined;
-    submitting: boolean | undefined;
 }
 
-export const HotelList = ({ hotels, submitting }: Props) => {
+export const HotelList = ({ hotels }: Props) => {
     const queryClient = useQueryClient()
 
     if (!hotels) return <div />
@@ -31,7 +30,6 @@ export const HotelList = ({ hotels, submitting }: Props) => {
 
                                 <Button onClick={() => {
                                     setSelectedHotel(hotel, queryClient)
-                                    setEditMode(false, queryClient)
                                 }} floated='right' content='View' color='blue' />
                             </Item.Extra>
                         </Item.Content>
