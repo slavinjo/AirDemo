@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import agent from "../api/agent";
-import { HOTEL_LIST } from "./ActivityStore";
+import { HOTEL_LIST } from "./HotelStore";
 
 const getHotels = async (query: any) => {
     const data = agent.Hotels.hotelsList(query);

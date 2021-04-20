@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using API.DTOs;
+using Application.Core;
 using Application.HotelsHandler;
 using Application.Services;
 using Application.Utils;
@@ -38,7 +39,11 @@ namespace API.Controllers
             }
             Params userQuery = Params.from(JsonConvert.DeserializeObject<Dictionary<string, string>>(json));
             userQuery.addHotelSearchDefaultParams();
-            return HandleResult<Hotels>(await Mediator.Send(new HotelsList.Query { param = userQuery }));
+            //return HandleResult(await Mediator.Send(new HotelsList.Query { param = userQuery })); //not DTO mapped response
+
+            Result<Hotels> result = await Mediator.Send(new HotelsList.Query { param = userQuery });
+            return Ok(HotelMapper.HotelsToDto(result.Value));
+
         }
 
     }

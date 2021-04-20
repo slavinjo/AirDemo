@@ -3,5 +3,7 @@ export interface Hotel {
   name: string,
   stars: number,
   description: string,
-  available: boolean
+  available: boolean,
+  cheapestOfferPrice: string;
+  cheapestOfferCurrency: string;
 }

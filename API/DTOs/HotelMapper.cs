@@ -23,10 +23,9 @@ namespace API.DTOs
                     hotelDto.CheapestOfferPrice = CheapestOffer.Price.Total;
                     hotelDto.CheapestOfferCurrency = CheapestOffer.Price.Currency;
                 }
-
                 list.Add(hotelDto);
             }
-            return list;
+            return list.OrderByDescending(p => p.Available).ToList();
         }
 
         private static Offer GetCheapestOffer(Datum datum)

@@ -15,7 +15,6 @@ namespace Application.HotelsHandler
 {
     public class HotelsList
     {
-
         public class Query : IRequest<Result<Hotels>>
         {
             public Params param { get; set; }
@@ -49,9 +48,9 @@ namespace Application.HotelsHandler
                     // Set cache options.
                     var cacheEntryOptions = new MemoryCacheEntryOptions()
                         // Keep in cache for this time, reset time if accessed.
-                        .SetSlidingExpiration(TimeSpan.FromSeconds(10));
-                        // Or keep in cache for 10 seconds no matter what
-                        //.SetAbsoluteExpiration(TimeSpan.FromSeconds(10));
+                        .SetSlidingExpiration(TimeSpan.FromSeconds(10000));
+                    // Or keep in cache for 10 seconds no matter what
+                    //.SetAbsoluteExpiration(TimeSpan.FromSeconds(10));
 
                     // Save data in cache.
                     _memoryCache.Set(cacheKey, cacheEntry, cacheEntryOptions);
@@ -75,6 +74,5 @@ namespace Application.HotelsHandler
                 return Result<Hotels>.Success(hotelsList);
             }
         }
-
     }
 }

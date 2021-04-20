@@ -1,15 +1,10 @@
 import React, { Fragment, useState } from 'react'
 import { useQueryClient } from 'react-query';
-import { Menu, Container, Button, Form, Segment } from 'semantic-ui-react'
+import { Container, Button, Form, Segment } from 'semantic-ui-react'
 import cities from '../data/airports.json';
 import numbers from '../data/numbers.json';
-import { setQueryParams, setRefetchHotels } from '../store/ActivityStore';
+import { setQueryParams, setRefetchHotels } from '../store/HotelStore';
 import './styles.css';
-
-interface Props {
-    openForm: () => void;
-    loadHotels: (params: any) => void;
-}
 
 var todayDate = new Date().toISOString().substring(0, 10)
 const cityList = cities.map(city => {
@@ -20,17 +15,14 @@ const cityList = cities.map(city => {
     }
 })
 
-const NavBar = ({ openForm, loadHotels }: Props) => {
-
+const NavBar = () => {
     const queryClient = useQueryClient();
-
     const initialState = {
         cityCode: cities[0].iata_code,
         checkInDate: todayDate,
         checkOutDate: todayDate,
         adults: '1'
     }
-
     const [query, setQuery] = useState(initialState);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -42,9 +34,15 @@ const NavBar = ({ openForm, loadHotels }: Props) => {
         setQuery({ ...query, [data.name]: data.value });
     }
 
+    const isFormValid = () => {
+        return true;
+    }
+
     const handleSubmit = () => {
-        setQueryParams(query, queryClient)
-        setRefetchHotels(query, queryClient)
+        if (isFormValid()) {
+            setQueryParams(query, queryClient)
+            setRefetchHotels(query, queryClient)
+        }
     }
 
     return (
@@ -52,7 +50,7 @@ const NavBar = ({ openForm, loadHotels }: Props) => {
             <Container fluid className="navbar-sticky">
                 <Segment clearing vertical>
                     <Form autoComplete='off' onSubmit={handleSubmit} >
-                        <Form.Group inline fluid>
+                        <Form.Group inline>
                             <Form.Field>
                                 <label style={{ color: "white", minWidth: "25em" }}>Select city</label>
                                 <Form.Dropdown
@@ -94,7 +92,6 @@ const NavBar = ({ openForm, loadHotels }: Props) => {
                     </Form>
                 </Segment>
             </Container>
-
         </Fragment >
     )
 }
