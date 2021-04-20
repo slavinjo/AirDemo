@@ -31,6 +31,15 @@ namespace API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
 
+            services.AddCors(opt =>
+           {
+               opt.AddPolicy("CorsPolicy", policy =>
+               {
+                   policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
+               });
+
+           });
+
             services.AddMediatR(typeof(HotelsList.Handler).Assembly);
             services.AddHttpClient<HotelsList.Handler>();
         }
@@ -45,11 +54,13 @@ namespace API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
 
-           
+
             //app.UseHttpsRedirection();
 
             app.UseRouting();
-           
+
+            app.UseCors("CorsPolicy");
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

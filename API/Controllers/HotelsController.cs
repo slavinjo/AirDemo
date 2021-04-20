@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using API.DTOs;
 using Application.HotelsHandler;
 using Application.Services;
 using Application.Utils;
@@ -15,7 +16,7 @@ namespace API.Controllers
     public class HotelsController : BaseApiController
     {
         IAmadeusTokenService _tokenService;
-                
+
         public HotelsController(IAmadeusTokenService tokenService)
         {
             _tokenService = tokenService;
@@ -28,7 +29,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Hotels>> getHotels()
+        public async Task<IActionResult> getHotels()
         {
             string json;
             using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
@@ -36,7 +37,9 @@ namespace API.Controllers
                 json = await reader.ReadToEndAsync();
             }
             Params userQuery = Params.from(JsonConvert.DeserializeObject<Dictionary<string, string>>(json));
-            return Ok(await Mediator.Send(new HotelsList.Query { param = userQuery }));
+            userQuery.addHotelSearchDefaultParams();
+            return Ok(HotelMapper.HotelsToDto(await Mediator.Send(new HotelsList.Query { param = userQuery })));
         }
+
     }
 }

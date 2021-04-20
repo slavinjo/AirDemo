@@ -102,6 +102,14 @@ namespace Application.Utils
             return _params;
         }
 
+        // radius=100, includeClosed=true, roomQuantity=1 - not needed, default for Amadeus API is 1
+        public void addHotelSearchDefaultParams()
+        {
+            this.Add("radius", "100");
+            this.Add("includeClosed", "true");
+            this.Add("roomQuantity", "1");
+        }
+
         /// <summary>
         /// Returns a String that represents the current Params.
         /// </summary>
