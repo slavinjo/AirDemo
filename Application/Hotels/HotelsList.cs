@@ -9,18 +9,19 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using Microsoft.Extensions.Configuration;
+using Application.Core;
 
 namespace Application.HotelsHandler
 {
     public class HotelsList
     {
 
-        public class Query : IRequest<Hotels>
+        public class Query : IRequest<Result<Hotels>>
         {
             public Params param { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Hotels>
+        public class Handler : IRequestHandler<Query, Result<Hotels>>
         {
             private readonly IAmadeusTokenService _tokenService;
             private readonly HttpClient _httpClient;
@@ -33,10 +34,10 @@ namespace Application.HotelsHandler
                 _tokenService = tokenService;
             }
 
-            public async Task<Hotels> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<Hotels>> Handle(Query request, CancellationToken cancellationToken)
             {
 
-                Hotels cacheEntry;
+                Result<Hotels> cacheEntry;
                 String cacheKey = request.param.toQueryString();
 
                 // Look for cache key.
@@ -56,7 +57,7 @@ namespace Application.HotelsHandler
                 return cacheEntry;
             }
 
-            private async Task<Hotels> GetHotelsCall(HttpClient httpClient, IAmadeusTokenService tokenService, Query request)
+            private async Task<Result<Hotels>> GetHotelsCall(HttpClient httpClient, IAmadeusTokenService tokenService, Query request)
             {
                 AmadeusToken token = await tokenService.GetToken();
                 Hotels hotelsList = new Hotels();
@@ -69,7 +70,7 @@ namespace Application.HotelsHandler
                     hotelsList = JsonConvert.DeserializeObject<Hotels>(apiResponse);
                 }
 
-                return hotelsList;
+                return Result<Hotels>.Success(hotelsList);
             }
         }
 

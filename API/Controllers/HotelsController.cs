@@ -38,7 +38,7 @@ namespace API.Controllers
             }
             Params userQuery = Params.from(JsonConvert.DeserializeObject<Dictionary<string, string>>(json));
             userQuery.addHotelSearchDefaultParams();
-            return Ok(HotelMapper.HotelsToDto(await Mediator.Send(new HotelsList.Query { param = userQuery })));
+            return HandleResult<Hotels>(await Mediator.Send(new HotelsList.Query { param = userQuery }));
         }
 
     }
