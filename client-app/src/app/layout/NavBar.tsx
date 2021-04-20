@@ -3,7 +3,7 @@ import { useQueryClient } from 'react-query';
 import { Container, Button, Form, Segment } from 'semantic-ui-react'
 import cities from '../data/airports.json';
 import numbers from '../data/numbers.json';
-import { setQueryParams, setRefetchHotels } from '../store/HotelStore';
+import { setQueryParams, setRefetchHotels, setSelectedHotel } from '../store/HotelStore';
 import './styles.css';
 
 var todayDate = new Date().toISOString().substring(0, 10)
@@ -42,6 +42,7 @@ const NavBar = () => {
         if (isFormValid()) {
             setQueryParams(query, queryClient)
             setRefetchHotels(query, queryClient)
+            setSelectedHotel(undefined, queryClient)
         }
     }
 
