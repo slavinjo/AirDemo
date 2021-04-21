@@ -20,7 +20,6 @@ namespace Application.HotelsHandler
         public class Handler : IRequestHandler<Query, Result<Hotels>>
         {
             private readonly IAmadeusTokenService _tokenService;
-            private readonly IConfiguration _config;
             private readonly IAmadeusQueryService _amadeusQueryService;
             private readonly ICacheService _cacheService;
             public Handler(IAmadeusTokenService tokenService, IAmadeusQueryService amadeusQueryService, ICacheService cacheService)
