@@ -19,7 +19,9 @@ export const HotelList = ({ hotels }: Props) => {
                 {hotels?.map(hotel => (
                     <Item key={`${hotel.id}`}>
                         <Item.Content>
-                            <Item.Header as='a' onClick={() => { }}>{hotel.name} </Item.Header>
+                            <Item.Header as='a' onClick={() => {
+                                setSelectedHotel(hotel, queryClient)
+                            }}>{hotel.name} </Item.Header>
                             <Item.Meta>{hotel.available ? <div style={{ color: '#11b411' }}>{"Available!"}</div> : <div style={{ color: 'red' }}>{"Sorry, not available for given period."}</div>}</Item.Meta>
                             <Item.Description>
                                 <div>{hotel.description}</div>
