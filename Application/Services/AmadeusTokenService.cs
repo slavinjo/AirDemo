@@ -49,7 +49,7 @@ namespace Application.Services
         public async Task<AmadeusToken> RevokeToken()
         {
             Dictionary<string, string> body = Params.With("grant_type", _config.GetConnectionString("AmadeusGrantType")).And("client_id", _config.GetConnectionString("AmadeusID")).And("client_secret", _config.GetConnectionString("AmadeusSecret"));
-            var response = await _httpClient.PostAsync(new Uri("https://test.api.amadeus.com/v1/security/oauth2/token"), new FormUrlEncodedContent(body));
+            var response = await _httpClient.PostAsync(new Uri(_config.GetConnectionString("AmadeusTokenAPIUrl")), new FormUrlEncodedContent(body));
             var responseBodyString = await response.Content.ReadAsStringAsync();
 
             _amadeusToken = JsonConvert.DeserializeObject<AmadeusToken>(responseBodyString);

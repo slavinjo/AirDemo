@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Utils;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using static Application.HotelsHandler.HotelsList;
 
@@ -16,9 +17,11 @@ namespace Application.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IAmadeusTokenService _tokenService;
+        private readonly IConfiguration _config;
 
-        public AmadeusQueryService(HttpClient httpClient, IAmadeusTokenService tokenService)
+        public AmadeusQueryService(HttpClient httpClient, IAmadeusTokenService tokenService, IConfiguration config)
         {
+            _config = config;
             _tokenService = tokenService;
             _httpClient = httpClient;
         }
@@ -30,7 +33,7 @@ namespace Application.Services
 
             _httpClient.DefaultRequestHeaders.Authorization
                      = new AuthenticationHeaderValue("Bearer", token.access_token);
-            using (var response = await _httpClient.GetAsync("https://test.api.amadeus.com/v2/shopping/hotel-offers" + request.param.ToQueryString()))
+            using (var response = await _httpClient.GetAsync(_config.GetConnectionString("AmadeusAPIUrl")+request.param.ToQueryString()))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 hotelsList = JsonConvert.DeserializeObject<Hotels>(apiResponse);
