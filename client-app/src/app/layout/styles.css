@@ -25,7 +25,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  padding-left: 41.3%;
+  padding-left: 32.6%;
   z-index: 999;
   box-shadow: 1px 1px 1px #222;
   animation: moveDown 0.5s ease-in-out;
@@ -36,8 +36,6 @@ body {
     rgb(32, 167, 172) 89%
   );
 }
-
-
 
 .ui.positive.right.floated.button {
   margin-top: 1.5rem !important;

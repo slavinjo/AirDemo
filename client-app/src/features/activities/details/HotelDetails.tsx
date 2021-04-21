@@ -8,7 +8,7 @@ export const HotelDetails = () => {
     const hotel: Hotel | undefined = queryClient.getQueryData<Hotel>(SELECTED_HOTEL)
 
     return (
-        <Card fluid>
+        <Card fluid style={{ position: 'fixed', height: 'auto', width: '30em' }}>
             <Image src='https://images.pexels.com/photos/6016679/pexels-photo-6016679.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940' wrapped ui={false} />
             <Card.Content>
                 <Card.Header>{hotel!.name}</Card.Header>

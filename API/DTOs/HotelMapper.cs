@@ -9,21 +9,28 @@ namespace API.DTOs
         internal static List<HotelDto> HotelsToDto(Hotels hotels)
         {
             List<HotelDto> list = new List<HotelDto>();
-            foreach (Datum d in hotels.Data)
+            if (hotels != null && hotels.Data != null)
             {
-                HotelDto hotelDto = new HotelDto();
-                hotelDto.Id = Guid.NewGuid();
-                hotelDto.Name = d.Hotel.Name;
-                hotelDto.Available = d.Available;
-                hotelDto.Description = d.Hotel.Description != null ? d.Hotel.Description.Text : "N/A";
-                hotelDto.Stars = string.IsNullOrEmpty(d.Hotel.Rating) ? 0 : int.Parse(d.Hotel.Rating);
-                if (d.Available && d.Offers.Any())
+                foreach (Datum d in hotels.Data)
                 {
-                    Offer CheapestOffer = GetCheapestOffer(d);
-                    hotelDto.CheapestOfferPrice = CheapestOffer.Price.Total;
-                    hotelDto.CheapestOfferCurrency = CheapestOffer.Price.Currency;
+                    HotelDto hotelDto = new HotelDto();
+                    hotelDto.Id = Guid.NewGuid();
+                    hotelDto.Name = d.Hotel.Name;
+                    hotelDto.Available = d.Available;
+                    hotelDto.Description = d.Hotel.Description != null ? d.Hotel.Description.Text : "N/A";
+                    hotelDto.Stars = string.IsNullOrEmpty(d.Hotel.Rating) ? 0 : int.Parse(d.Hotel.Rating);
+                    if (d.Available && d.Offers.Any())
+                    {
+                        Offer CheapestOffer = GetCheapestOffer(d);
+                        hotelDto.CheapestOfferPrice = CheapestOffer.Price.Total;
+                        hotelDto.CheapestOfferCurrency = CheapestOffer.Price.Currency;
+                    }
+                    list.Add(hotelDto);
                 }
-                list.Add(hotelDto);
+            }
+            else
+            {
+                throw new Exception("No data received from Amadeus API");
             }
             return list.OrderByDescending(p => p.Available).ToList();
         }

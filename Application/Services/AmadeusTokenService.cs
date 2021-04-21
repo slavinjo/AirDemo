@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Application.Utils;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Application.Services
@@ -22,10 +23,12 @@ namespace Application.Services
         private long expiresAt { get; set; }
 
         private readonly IConfiguration _config;
+        private readonly ILogger _logger;
 
         private readonly HttpClient _httpClient;
-        public AmadeusTokenService(HttpClient httpClient, IConfiguration config)
+        public AmadeusTokenService(HttpClient httpClient, IConfiguration config, ILogger<IAmadeusTokenService> logger)
         {
+            _logger = logger;
             _config = config;
             _httpClient = httpClient;
         }
@@ -40,9 +43,10 @@ namespace Application.Services
                 }
                 else return _amadeusToken;
             }
-            catch (Exception re)
+            catch (Exception e)
             {
-                throw re;
+                _logger.LogError(e, "Error getting token from Amadeus API", e.Message);
+                throw e;
             }
         }
 
