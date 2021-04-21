@@ -21,7 +21,7 @@ namespace Application.Services
         {
             var cacheEntryOptions = new MemoryCacheEntryOptions()
             // Keep in cache for 10 seconds
-            .SetAbsoluteExpiration(TimeSpan.FromSeconds(Constants.AMADEUS_CACHE_TIME));
+            .SetAbsoluteExpiration(TimeSpan.FromSeconds(Constants.AMADEUS_CACHE_TIME_SECONDS));
 
             // Save data in cache.
             _memoryCache.Set(cacheKey, cacheEntry, cacheEntryOptions);
