@@ -12,4 +12,6 @@ namespace API.DTOs
         public string CheapestOfferPrice { get; set; }
         public string CheapestOfferCurrency { get; set; }
     }
+
+
 }

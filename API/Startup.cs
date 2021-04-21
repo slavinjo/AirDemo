@@ -1,5 +1,6 @@
 using API.Middleware;
 using Application.HotelsHandler;
+using Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +26,8 @@ namespace API
             services.AddMemoryCache();
             services.AddSingleton<Application.Services.IAmadeusTokenService, Application.Services.AmadeusTokenService>();
             services.AddHttpClient<Application.Services.AmadeusTokenService>();
-
+            services.AddScoped<Application.Services.IAmadeusQueryService, Application.Services.AmadeusQueryService>();
+            services.AddSingleton<Application.Services.ICacheService, Application.Services.CacheService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -55,7 +57,6 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
-
 
             //app.UseHttpsRedirection();
 

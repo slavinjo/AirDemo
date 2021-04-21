@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -6,7 +8,6 @@ namespace Application.Utils
 {
     public class Params : Dictionary<string, string>
     {
-
         /// <summary>
         /// Initializes a new instance of the Params class.
         /// </summary>
@@ -20,9 +21,9 @@ namespace Application.Utils
         /// <returns>the Param object, allowing for convenient chaining</returns>
         /// <param name="key">key the key for the parameter to send to the API</param>
         /// <param name="value">the value for the given key</param>
-        public static Params with(string key, string value)
+        public static Params With(string key, string value)
         {
-            return new Params().and(key, value);
+            return new Params().And(key, value);
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace Application.Utils
         /// <returns>the Param object, allowing for convenient chaining</returns>
         /// <param name="key">the key for the parameter to send to the API</param>
         /// <param name="value">the value for the given key</param>
-        public Params and(string key, string value)
+        public Params And(string key, string value)
         {
             this[key] = value;
             return this;
@@ -45,7 +46,7 @@ namespace Application.Utils
         /// Converts params into a HTTP query string.
         /// </summary>
         /// <returns>The query string.</returns>
-        public string toQueryString()
+        public string ToQueryString()
         {
             StringBuilder query = new StringBuilder();
             bool first = true;
@@ -68,7 +69,7 @@ namespace Application.Utils
             return "?" + query.ToString();
         }
 
-        public string toBody()
+        public string ToBody()
         {
             return JsonConvert.SerializeObject(this);
         }
@@ -79,22 +80,10 @@ namespace Application.Utils
         /// <returns>The string.</returns>
         public string toString()
         {
-            return toQueryString();
+            return ToQueryString();
         }
 
-        /// <summary>
-        /// Clone this instance.
-        /// </summary>
-        /// <returns>The clone.</returns>
-        public Params clone()
-        {
-            Params _params = new Params();
-            foreach (var newelem in this)
-                _params.Add(newelem.Key.ToString(), newelem.Value.ToString());
-            return _params;
-        }
-
-        public static Params from(Dictionary<string, string> dict)
+        public static Params From(Dictionary<string, string> dict)
         {
             Params _params = new Params();
             foreach (var newelem in dict)
@@ -102,12 +91,34 @@ namespace Application.Utils
             return _params;
         }
 
-        // radius=100, includeClosed=true, roomQuantity=1 - not needed, default for Amadeus API is 1
-        public void addHotelSearchDefaultParams()
+        //Method to convert simpe object to Params object
+        public static Params FromModelDto(Object obj)
+        {
+            Params ret = new Params();
+
+            foreach (PropertyInfo prop in obj.GetType().GetProperties())
+            {
+                string propName = prop.Name;
+                var val = obj.GetType().GetProperty(propName).GetValue(obj, null);
+                if (val != null)
+                {
+                    ret.Add(propName.Substring(0, 1).ToLower() + propName.Substring(1), val.ToString());
+                }
+                else
+                {
+                    ret.Add(propName.Substring(0, 1).ToLower() + propName.Substring(1), null);
+                }
+            }
+            return ret;
+        }
+
+        // default values: radius=100, includeClosed=true, roomQuantity=1 - not needed, default for Amadeus API is 1
+        public Params AddHotelSearchDefaultParams()
         {
             this.Add("radius", "100");
             this.Add("includeClosed", "true");
             this.Add("roomQuantity", "1");
+            return this;
         }
 
         /// <summary>

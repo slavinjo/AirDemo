@@ -16,35 +16,17 @@ namespace API.Controllers
 {
     public class HotelsController : BaseApiController
     {
-        IAmadeusTokenService _tokenService;
-
-        public HotelsController(IAmadeusTokenService tokenService)
+        public HotelsController()
         {
-            _tokenService = tokenService;
-        }
 
-        [HttpGet]
-        public async Task<ActionResult<Hotels>> getHotels(CancellationToken cancellationToken)
-        {
-            return Ok(await Mediator.Send(new HotelsList.Query { param = Params.with("cityCode", "PAR") }, cancellationToken));
         }
 
         [HttpPost]
-        public async Task<IActionResult> getHotels()
+        public async Task<IActionResult> GetHotels([FromBody] HotelQueryDto hotelQuery)
         {
-            string json;
-            using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
-            {
-                json = await reader.ReadToEndAsync();
-            }
-            Params userQuery = Params.from(JsonConvert.DeserializeObject<Dictionary<string, string>>(json));
-            userQuery.addHotelSearchDefaultParams();
-            //return HandleResult(await Mediator.Send(new HotelsList.Query { param = userQuery })); //not DTO mapped response
-
+            Params userQuery = Params.FromModelDto(hotelQuery).AddHotelSearchDefaultParams();
             Result<Hotels> result = await Mediator.Send(new HotelsList.Query { param = userQuery });
             return Ok(HotelMapper.HotelsToDto(result.Value));
-
         }
-
     }
 }

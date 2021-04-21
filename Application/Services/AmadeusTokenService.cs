@@ -34,7 +34,7 @@ namespace Application.Services
         {
             try
             {
-                if (needsRefresh())
+                if (NeedsRefresh())
                 {
                     return await RevokeToken();
                 }
@@ -42,13 +42,13 @@ namespace Application.Services
             }
             catch (Exception re)
             {
-                throw re; //
+                throw re;
             }
         }
 
         public async Task<AmadeusToken> RevokeToken()
         {
-            Dictionary<string, string> body = Params.with("grant_type", _config.GetConnectionString("AmadeusGrantType")).and("client_id", _config.GetConnectionString("AmadeusID")).and("client_secret", _config.GetConnectionString("AmadeusSecret"));
+            Dictionary<string, string> body = Params.With("grant_type", _config.GetConnectionString("AmadeusGrantType")).And("client_id", _config.GetConnectionString("AmadeusID")).And("client_secret", _config.GetConnectionString("AmadeusSecret"));
             var response = await _httpClient.PostAsync(new Uri("https://test.api.amadeus.com/v1/security/oauth2/token"), new FormUrlEncodedContent(body));
             var responseBodyString = await response.Content.ReadAsStringAsync();
 
@@ -60,7 +60,7 @@ namespace Application.Services
         }
 
         // Checks if this access token needs a refresh.
-        private bool needsRefresh()
+        private bool NeedsRefresh()
         {
             bool isNull = _amadeusToken == null;
             bool expired = (GetCurrentMilli() + TOKEN_BUFFER) > expiresAt;

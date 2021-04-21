@@ -1,4 +1,3 @@
-import { useQueryClient } from 'react-query'
 import { Grid } from 'semantic-ui-react'
 import { useHotels, useQueryParams, useSelectedHotel } from '../../../app/store/HotelStore'
 import { HotelDetails } from '../details/HotelDetails'
@@ -8,11 +7,9 @@ import { LoadingComponent } from '../../../app/layout/LoadingComponent'
 
 
 export const HotelDashboard = () => {
-    const queryClient = useQueryClient()
     const selectedHotel = useSelectedHotel()
-
     const { queryParams } = useQueryParams()
-    const { hotels, error, isFetching } = useHotels(queryParams);
+    const { hotels, isFetching } = useHotels(queryParams);
 
     if (isFetching) return <LoadingComponent content='Loading hotels' />
 
