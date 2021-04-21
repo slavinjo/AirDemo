@@ -33,7 +33,7 @@ namespace Application.Services
 
             _httpClient.DefaultRequestHeaders.Authorization
                      = new AuthenticationHeaderValue("Bearer", token.access_token);
-            using (var response = await _httpClient.GetAsync(_config.GetConnectionString("AmadeusAPIUrl")+request.param.ToQueryString()))
+            using (var response = await _httpClient.GetAsync(_config.GetConnectionString("AmadeusAPIUrl") + request.param.ToQueryString()))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 hotelsList = JsonConvert.DeserializeObject<Hotels>(apiResponse);
