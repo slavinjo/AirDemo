@@ -10,6 +10,8 @@ You can call http://localhost:5000/api/hotels with body eg.\
 
 In the ./client-app directory, you can run:
 
+### `npm install`
+
 ### `npm start`
 
 Runs the app in the development mode.\
